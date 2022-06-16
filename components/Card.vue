@@ -10,6 +10,7 @@
         <div class="content has-text-centered">
           <b-icon :icon="icon" size="is-large" type="is-primary" />
         </div>
+        {{content}}
       </div>
       <footer class="card-footer">
         <div class="card-footer-item">
@@ -34,6 +35,10 @@ export default {
       type: String,
       required: true,
     },
+    content: {
+      type: String,
+      require: false,
+    }
   },
 }
 </script>

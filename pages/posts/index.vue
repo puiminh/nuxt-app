@@ -1,22 +1,34 @@
 <template>
   <section class="section">
-    <button class="bg-blue-100" @click="callApi">Test</button>
+
+    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500" 
+            type="text" v-model="post.title" placeholder="New Title">
+    <input class="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+            type="text" v-model="post.content" placeholder="Content">
+    <button class="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded" 
+            @click="addPost">Add post</button>
     <div class="columns is-mobile">
-      <card title="Free" icon="github">
-        Open source on <a href="https://github.com/buefy/buefy"> GitHub </a>
-      </card>
-
-      <card title="Responsive" icon="cellphone-link">
-        <b class="has-text-grey"> Every </b> component is responsive
-      </card>
-
-      <card title="Modern" icon="alert-decagram">
-        Built with <a href="https://vuejs.org/"> Vue.js </a> and
-        <a href="http://bulma.io/"> Bulma </a>
-      </card>
-
-      <card title="Lightweight" icon="arrange-bring-to-front">
-        {{ $t('lang') }}
+      <card 
+        v-for="(post, i) in $store.state.posts"
+        :key="i"
+        :title="post.title"
+        :content="post.content" 
+        icon="post"
+        >
+<div class="inline-flex">
+  <NuxtLink 
+    to="/about"
+    class="bg-red-300 hover:bg-red-400 text-red-800 font-bold py-2 px-4 rounded-r">
+    Edit
+  </NuxtLink>
+  
+  <button 
+    @click="removePost"
+    class="bg-yellow-300 hover:bg-yellow-400 text-yellow-800 font-bold py-2 px-4 rounded-l">
+    Remove
+  </button>
+  
+</div>
       </card>
     </div>
   </section>
@@ -32,12 +44,30 @@ export default Vue.extend({
     Card,
   },
   data() {
-    return {}
+    return {
+      post: {
+        id: 0, 
+        title: '',
+        content: '',
+      }
+    }
   },
   methods: {
-    async callApi() {      
-      console.log(this.$api.user.createPost('huy','huy'))
+    addPost() {   
+      let d = new Date();
+      let id = Math.round(d.getTime());
+      this.post.id = id;
+      this.$store.commit('ADD_POST', this.post);
+      this.post = {
+        id: 0,
+        title: '',
+        content: '',
+      };
+      console.log('hello');
     },
+    removePost(){
+      this.$store.commit('REMOVE_POST', this.post);
+    }
   },
 })
 </script>
